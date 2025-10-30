@@ -1,157 +1,175 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NFT Minter | Glad</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>NFT Minter DApp - Gagana</title>
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+
   <style>
     body {
-      background-color: #f8f9fa;
-      font-family: 'Poppins', sans-serif;
+      background: #0d1117;
+      color: #e6edf3;
+      font-family: 'Inter', sans-serif;
     }
-    .hero-section {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: center;
-      padding: 50px 15px;
-      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-      color: white;
+    .navbar {
+      background: #161b22 !important;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    .hero {
+      padding: 80px 20px;
       text-align: center;
     }
-    .hero-section img {
+    .hero img {
       width: 180px;
       height: 180px;
       border-radius: 50%;
-      object-fit: cover;
-      margin-bottom: 20px;
-      border: 4px solid #fff;
+      border: 3px solid #00d1b2;
+      box-shadow: 0 0 15px rgba(0,209,178,0.3);
     }
-    .hero-text {
-      max-width: 400px;
-      margin-left: 30px;
-    }
-    .nft-form-section {
-      padding: 50px 15px;
-      background-color: #fff;
-    }
-    .card {
+    .hero h1 { margin-top: 15px; font-size: 2rem; }
+    .hero p { color: #9ba3af; }
+
+    .section {
+      background: #161b22;
+      padding: 60px 20px;
+      margin-top: 40px;
       border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     }
-    .btn-custom {
-      background-color: #2a5298;
-      color: white;
-      border-radius: 6px;
+    .form-control {
+      background-color: #0d1117;
+      border: 1px solid #30363d;
+      color: #e6edf3;
     }
-    .btn-custom:hover {
-      background-color: #1e3c72;
-      color: #fff;
+    .btn-primary {
+      background-color: #00d1b2;
+      border: none;
     }
-    @media (max-width: 768px) {
-      .hero-section {
-        flex-direction: column;
-      }
-      .hero-text {
-        margin-left: 0;
-      }
+    .btn-primary:hover {
+      background-color: #00bfa3;
+    }
+    table {
+      color: #e6edf3;
+    }
+    th {
+      background: #0d1117;
     }
   </style>
 </head>
 <body>
-
-  <!-- Hero Section -->
-  <section class="hero-section">
-    <div class="text-center">
-      <img src="https://i.ibb.co/Z1fYkXK/nft-avatar.png" alt="Profile Image">
-    </div>
-    <div class="hero-text text-center text-md-start">
-      <h1 class="fw-bold">Glad</h1>
-      <p class="lead">5th Sem ECE Student - Blockchain Enthusiast</p>
-      <p>Building the future of decentralized applications through blockchain innovation.</p>
-    </div>
-  </section>
-
-  <!-- NFT Minter Form -->
-  <section class="nft-form-section">
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
     <div class="container">
-      <div class="card p-4 mx-auto" style="max-width: 500px;">
-        <h3 class="text-center mb-4">NFT Minter (Sepolia)</h3>
-        <form id="nftForm">
-          <div class="mb-3">
-            <label for="walletAddress" class="form-label">Wallet Address</label>
-            <div class="input-group">
-              <input type="text" id="walletAddress" class="form-control" placeholder="Not connected" readonly>
-              <button type="button" class="btn btn-custom" id="connectWallet">Connect</button>
-            </div>
-          </div>
-
-          <div class="mb-3">
-            <label for="contractAddress" class="form-label">Smart Contract Address</label>
-            <input type="text" id="contractAddress" class="form-control" placeholder="Enter smart contract address" required>
-          </div>
-
-          <button type="submit" class="btn btn-custom w-100" id="mintBtn">Mint NFT</button>
-        </form>
+      <a class="navbar-brand fw-bold" href="#">NFT Minter</a>
+      <div class="d-flex">
+        <a class="nav-link text-light" href="https://www.linkedin.com/in/gagana-kumar-209692325" target="_blank">LinkedIn</a>
+        <a class="nav-link text-light" href="https://github.com/Gagana-kumar" target="_blank">GitHub</a>
       </div>
     </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero container">
+    <img src="https://www.businessoutreach.in/wp-content/uploads/2024/07/Sachin-Tendulkars-Biography.jpg" alt="Gagana">
+    <h1>Hi, I'm <span class="text-info">Gagana</span></h1>
+    <p>5th Sem ECE Student — Blockchain Enthusiast</p>
+  </section>
+
+  <!-- NFT Minter -->
+  <section class="section container">
+    <h2 class="text-center mb-4 fw-bold">NFT Minter DApp</h2>
+    <form id="mintForm" class="mb-4">
+      <div class="mb-3">
+        <label class="form-label">Wallet Address</label>
+        <div class="input-group">
+          <input type="text" id="walletAddress" class="form-control" placeholder="Connect MetaMask" readonly>
+          <button type="button" id="connectWallet" class="btn btn-primary">Connect</button>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Valuable Text</label>
+        <input type="text" id="valuableText" class="form-control" placeholder="Enter NFT text" required>
+      </div>
+
+      <div class="d-grid">
+        <button type="button" onclick="mintNFT()" class="btn btn-primary btn-lg">Mint NFT</button>
+      </div>
+      <div id="status" class="mt-3 text-secondary small"></div>
+    </form>
+
+    <!-- NFT Table -->
+    <h4 class="mt-5 mb-3 text-center">Minted NFTs</h4>
+    <table class="table table-bordered table-dark table-striped text-center">
+      <thead>
+        <tr>
+          <th>Token ID</th>
+          <th>Text</th>
+          <th>Owner</th>
+          <th>Date & Time</th>
+        </tr>
+      </thead>
+      <tbody id="nftTableBody"></tbody>
+    </table>
   </section>
 
   <script>
-    const connectWalletBtn = document.getElementById('connectWallet');
-    const walletAddressInput = document.getElementById('walletAddress');
-    const mintForm = document.getElementById('nftForm');
+    const CONTRACT_ADDRESS = "0x04a6152127B04b984A420Dca3D7bd794358eaE3e";
+    const ABI = [
+      {"inputs":[{"internalType":"string","name":"text","type":"string"}],"name":"mintTextNFT","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"nonpayable","type":"function"},
+      {"inputs":[{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"getText","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"}
+    ];
 
-    // Connect to MetaMask
-    connectWalletBtn.addEventListener('click', async () => {
-      if (typeof window.ethereum !== 'undefined') {
-        try {
-          const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-          walletAddressInput.value = accounts[0];
-        } catch (error) {
-          alert("Connection request denied!");
-        }
-      } else {
-        alert("MetaMask not found. Please install it first.");
-      }
-    });
+    let provider, signer, contract, userAddress;
+    const tableBody = document.getElementById('nftTableBody');
 
-    // Mint NFT
-    mintForm.addEventListener('submit', async (event) => {
-      event.preventDefault();
-
-      const wallet = walletAddressInput.value.trim();
-      const contract = document.getElementById('contractAddress').value.trim();
-
-      if (!wallet || !contract) {
-        alert("Please fill in all fields before minting.");
+    async function connectWallet() {
+      if (!window.ethereum) {
+        alert('MetaMask not found!');
         return;
       }
+      provider = new ethers.providers.Web3Provider(window.ethereum);
+      await provider.send("eth_requestAccounts", []);
+      signer = provider.getSigner();
+      userAddress = await signer.getAddress();
+      contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
+      document.getElementById('walletAddress').value = userAddress;
+      document.getElementById('status').innerText = "Wallet connected ✅";
+    }
+    document.getElementById('connectWallet').addEventListener('click', connectWallet);
 
-      if (typeof window.ethereum === 'undefined') {
-        alert("MetaMask not detected!");
-        return;
-      }
+    async function mintNFT() {
+      const text = document.getElementById('valuableText').value.trim();
+      if (!text) return alert("Enter NFT text");
+      if (!contract) return alert("Connect wallet first");
 
+      document.getElementById('status').innerText = "Minting in progress... ⏳";
       try {
-        const provider = window.ethereum;
-        const web3 = new Web3(provider);
-        // Replace ABI below with your contract’s ABI
-        const contractABI = []; // <-- Add your ABI here
-        const nftContract = new web3.eth.Contract(contractABI, contract);
-
-        // Example function call: minting function must exist in your contract
-        await nftContract.methods.mint(wallet).send({ from: wallet });
-        alert("NFT Minted Successfully!");
-      } catch (error) {
-        console.error(error);
-        alert("Error minting NFT. Check console for details.");
+        const tx = await contract.mintTextNFT(text);
+        const receipt = await tx.wait();
+        const tokenId = receipt.events[0].args[2].toNumber(); // tokenId emitted
+        const time = new Date().toLocaleString();
+        addNFTToTable(tokenId, text, userAddress, time);
+        document.getElementById('status').innerText = "NFT Minted Successfully 🎉";
+      } catch (err) {
+        console.error(err);
+        document.getElementById('status').innerText = "Minting failed ❌";
       }
-    });
-  </script>
+    }
 
-  <!-- Web3.js CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/web3@1.10.0/dist/web3.min.js"></script>
+    function addNFTToTable(tokenId, text, owner, time) {
+      const row = `<tr>
+        <td>${tokenId}</td>
+        <td>${text}</td>
+        <td>${owner.slice(0,6)}...${owner.slice(-4)}</td>
+        <td>${time}</td>
+      </tr>`;
+      tableBody.innerHTML += row;
+    }
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
